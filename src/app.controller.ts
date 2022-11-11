@@ -27,7 +27,7 @@ export class AppController {
   ) {
     return this.appService.uploadFile(file, queryParams.bucket);
   }
-
+  //test
   @Delete('delete')
   delete(@Query() queryParams: { publicId: string }) {
     return this.appService.deleteFile(queryParams.publicId);
