@@ -28,6 +28,19 @@ export class AppService {
     });
   }
 
+  getFiles(publicIds: string[]): Promise<any[]> {
+    const filePromises = publicIds.map((id) =>
+      new Promise((resolve, reject) => {
+        cloudinary.api.resource(id, (error, result) => {
+          if (error) return reject(error);
+          resolve(result);
+        });
+      }),
+    );
+
+    return Promise.all(filePromises);
+  }
+
   deleteFile(publicId: string): Promise<any> {
     return new Promise((resolve, reject) => {
       cloudinary.uploader.destroy(publicId, {}, (error, result) => {

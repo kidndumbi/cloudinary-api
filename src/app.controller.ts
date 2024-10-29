@@ -41,6 +41,11 @@ export class AppController {
     );
   }
 
+  @Post('get-files')
+  getFilesPost(@Body('publicIds') publicIds: string[]) {
+    return this.appService.getFiles(publicIds);
+  }
+
   @Delete('delete')
   delete(@Query() queryParams: { publicId: string }) {
     return this.appService.deleteFile(queryParams.publicId);
