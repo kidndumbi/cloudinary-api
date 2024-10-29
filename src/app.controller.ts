@@ -4,9 +4,10 @@ import {
   Delete,
   Get,
   Post,
-  Query,
+  Body,
   UploadedFile,
   UseInterceptors,
+  Query,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -16,18 +17,30 @@ export class AppController {
 
   @Get()
   landing() {
-    return 'Media Controlller!';
+    return 'Media Controller!';
   }
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   upload(
     @UploadedFile() file: Express.Multer.File,
-    @Query() queryParams: { bucket: string },
+    @Body()
+    body: {
+      bucket?: string;
+      tags?: string;
+      context?: string;
+    },
   ) {
-    return this.appService.uploadFile(file, queryParams.bucket);
+    const { bucket, tags, context } = body;
+
+    return this.appService.uploadFile(
+      file,
+      bucket,
+      tags ? tags.split(',') : [],
+      context ? JSON.parse(context) : {},
+    );
   }
-  //test
+
   @Delete('delete')
   delete(@Query() queryParams: { publicId: string }) {
     return this.appService.deleteFile(queryParams.publicId);
